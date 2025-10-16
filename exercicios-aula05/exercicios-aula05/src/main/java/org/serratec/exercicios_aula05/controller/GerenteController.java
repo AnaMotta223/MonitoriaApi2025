@@ -18,6 +18,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
 
 @RestController
@@ -27,6 +32,16 @@ public class GerenteController {
 	@Autowired
 	private GerenteRepository gerenteRepository;
 	
+	@Operation(summary = "Lista todos os gerentes", description = "A resposta lista os dados dos "
+			+ "gerentes")
+	@ApiResponses(
+		value = {
+			@ApiResponse(responseCode = "200",
+					content = {@Content(schema = @Schema(implementation = Gerente.class), mediaType = "application/json")},
+					description = "Retorna todos os gerentes"),
+			@ApiResponse(responseCode = "500", description = "Erro no servidor") 
+		}
+	) 
 	@GetMapping
 	public List<Gerente> listar(){
 		return gerenteRepository.findAll();
